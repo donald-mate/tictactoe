@@ -11,71 +11,52 @@ const cThree = document.getElementById("c-three");
 const gameBoard = (() => {
   const boardArray = [aOne, aTwo, aThree, bOne, bTwo, bThree, cOne, cTwo, cThree];
   let markerArray = [null, null, null, null, null, null, null, null, null];
-  const makeMove = ((square, marker) => {
-    let boardPosition = boardArray.indexOf(square);
-    markerArray[boardPosition] = marker;
-    let display = document.createTextNode(markerArray[boardPosition]);
-    boardArray[boardPosition].appendChild(display);
+  const makeMove = ((clickedSquare, marker) => {
+    let boardPosition = boardArray.indexOf(clickedSquare);
+    if (markerArray[boardPosition] == null) {
+      markerArray[boardPosition] = marker;
+      let display = document.createTextNode(markerArray[boardPosition]);
+      boardArray[boardPosition].appendChild(display);
+      gameFlow.advanceTurn();
+    }
   })  
   return { makeMove };
 })();
+
 const gameFlow = (() => {
   let turnTracker = 1;
-  const move =((clickedSquare) => {
-    if (turnTracker % 2 == 0) {
-      let square = clickedSquare;
-      let marker = "O";
-      gameBoard.makeMove(square, marker);
-      turnTracker ++;
+  const move = ((clickedSquare) => {
+    if (turnTracker % 2 !== 0) {
+      let marker = playerOne.marker;
+      gameBoard.makeMove(clickedSquare, marker);
     } else {
-      let square = clickedSquare;
-      let marker = "X";
-      gameBoard.makeMove(square, marker);
-      turnTracker ++;
+      let marker = playerTwo.marker;
+      gameBoard.makeMove(clickedSquare, marker);
     }
   })
-  return { move };
+  const advanceTurn = (() => {
+    turnTracker++;
+  })
+  return { move, advanceTurn };
 })();
 
 // PLAYER CREATION
-// const playerCreator = (name, marker) => {
-//   return { name, marker };
-// };
-// const player1 = playerCreator("Donald", "X");
-// const player2 = playerCreator("Maribel", "O");
-
-
-
-
+const playerCreator = (name, marker) => {
+  return { name, marker };
+};
+const playerOne = playerCreator("Donald", "X");
+const playerTwo = playerCreator("Maribel", "O");
 
 // EVENT LISTENERS
-aOne.addEventListener("click", function () {
-  gameFlow.move(aOne);
-});
-aTwo.addEventListener("click", function () {
-  gameFlow.move(aTwo);
-});
-aThree.addEventListener("click", function () {
-  gameFlow.move(aThree);
-});
-bOne.addEventListener("click", function () {
-  gameFlow.move(bOne);
-});
-bTwo.addEventListener("click", function () {
-  gameFlow.move(bTwo);
-});
-bThree.addEventListener("click", function () {
-  gameFlow.move(bThree);
-});
-cOne.addEventListener("click", function () {
-  gameFlow.move(cOne);
-});
-cTwo.addEventListener("click", function () {
-  gameFlow.move(cTwo);
-});
-cThree.addEventListener("click", function () {
-  gameFlow.move(cThree);
-});
+aOne.addEventListener("click", function () {gameFlow.move(aOne);});
+aTwo.addEventListener("click", function () {gameFlow.move(aTwo);});
+aThree.addEventListener("click", function () {gameFlow.move(aThree);});
+bOne.addEventListener("click", function () {gameFlow.move(bOne)});
+bTwo.addEventListener("click", function () {gameFlow.move(bTwo);});
+bThree.addEventListener("click", function () {gameFlow.move(bThree);});
+cOne.addEventListener("click", function () {gameFlow.move(cOne);});
+cTwo.addEventListener("click", function () {gameFlow.move(cTwo);});
+cThree.addEventListener("click", function () {gameFlow.move(cThree);});
 
 
 
